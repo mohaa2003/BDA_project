@@ -1,0 +1,110 @@
+1. Diagramme de Classes
+Voici une description textuelle du diagramme de classes avec les relations UML :
+
+plaintext
+Copy
+-----------------------------------------
+|              Exploitation             |
+-----------------------------------------
+| - id_exploitation: Integer (PK)       |
+| - nom_exploitation: String            |
+| - surface_exploitation: Float         |
+| - region: String                      |
+| - nbr_parcelles: Integer              |
+| - parcelles: List<Parcelle>           | (Agrégation)
+-----------------------------------------
+
+-----------------------------------------
+|               Parcelle                |
+-----------------------------------------
+| - id_parcelle: Integer (PK)           |
+| - nom_parcelle: String                |
+| - surface_parcelle: Float             |
+| - type_sol: Enum('argileux', ...)     |
+| - exploitation: Exploitation          | (Référence)
+| - semis: List<Semis>                  |
+| - detections: List<DetectionMaladie>  |
+| - missions: List<MissionDrone>        |
+-----------------------------------------
+
+-----------------------------------------
+|               Culture                 |
+-----------------------------------------
+| - id_culture: Integer (PK)            |
+| - nom_culture: String                 |
+| - variete_culture: String             |
+-----------------------------------------
+
+-----------------------------------------
+|          CampagneAgricole             |
+-----------------------------------------
+| - id_campagne: Integer (PK)           |
+| - annee: Integer                      |
+| - date_debut: Date                    |
+| - date_fin: Date                      |
+-----------------------------------------
+
+-----------------------------------------
+|                 Semis                 |
+-----------------------------------------
+| - id_semis: Integer (PK)              |
+| - date_semis: Date                    |
+| - quantite_semis: Float               |
+| - parcelle: Parcelle                  | (Référence)
+| - culture: Culture                    | (Référence)
+| - campagne: CampagneAgricole          | (Référence)
+-----------------------------------------
+
+-----------------------------------------
+|              Maladie                  |
+-----------------------------------------
+| - id_maladie: Integer (PK)            |
+| - nom_maladie: String                 |
+| - type_maladie: Enum('fongique', ...) |
+-----------------------------------------
+
+-----------------------------------------
+|          DetectionMaladie             |
+-----------------------------------------
+| - id_detection: Integer (PK)          |
+| - date_detection: Date                |
+| - gravite: Enum('faible', ...)        |
+| - parcelle: Parcelle                  | (Référence)
+| - campagne: CampagneAgricole          | (Référence)
+| - maladie: Maladie                    | (Référence)
+-----------------------------------------
+
+-----------------------------------------
+|                Drone                  |
+-----------------------------------------
+| - id_drone: Integer (PK)              |
+| - modele: String                      |
+| - type_drone: Enum('multirotor', ...) |
+| - capacite_batterie: Float            |
+| - statut_drone: Enum('Disponible', ...)|
+| - missions: List<MissionDrone>        |
+-----------------------------------------
+
+-----------------------------------------
+|            MissionDrone               |
+-----------------------------------------
+| - id_mission: Integer (PK)            |
+| - date_mission: Date                  |
+| - type_mission: Enum('surveillance',...)|
+| - resultats: String                   |
+| - drone: Drone                        | (Référence)
+| - parcelle: Parcelle                  | (Référence)
+| - campagne: CampagneAgricole          | (Référence)
+| - maladie: Maladie                    | (Référence)
+-----------------------------------------
+Relations :
+
+Exploitation → Parcelle (1-N via agrégation)
+
+Parcelle → Semis, DetectionMaladie, MissionDrone (1-N)
+
+Semis → Culture, CampagneAgricole (N-1)
+
+DetectionMaladie → Maladie, CampagneAgricole (N-1)
+
+MissionDrone → Drone, CampagneAgricole, Maladie (N-1)
